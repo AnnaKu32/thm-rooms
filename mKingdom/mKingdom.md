@@ -1,5 +1,5 @@
 # How to access the admin panel
-Scan hte website using nmap:
+Scan the website using nmap:
 <pre>nmap -sV VICTIM_IP_ADDRESS </pre>
 Nmap reveals that port 85 is open:
 ![image](https://github.com/user-attachments/assets/d0e4f543-0a32-4e3a-9baf-21c18ce4db59)
