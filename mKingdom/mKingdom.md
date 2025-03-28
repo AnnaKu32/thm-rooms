@@ -127,7 +127,7 @@ As shown below, the cron job is configured to reach the attacker's machine:
 
 ![image](https://github.com/user-attachments/assets/466df7d9-9eba-4e64-8704-baf2c15270f8)
 
-## On attacker machine
+## On the attacker machine
 Create the folder structure:
 <pre>mkdir -p app/castle/application
 cd app/castle/application
