@@ -2,7 +2,7 @@ To identify the type of hash used to encrypt a value, you can analyze it using t
 
 ![image](https://github.com/user-attachments/assets/9053fd1c-8d86-49c7-90c4-ed19d8a5aa60)
 
-You can also decrypt simple hashes using [Crackstation](https://crackstation.net/), for example:  
+You can decrypt simple hashes using [Crackstation](https://crackstation.net/), for example:  
 
 ![image](https://github.com/user-attachments/assets/e5a17847-a6b5-434e-9ee0-822949b8290d)
 
@@ -53,13 +53,16 @@ NTLM:
 <br>
 </br>
 
-For more complex hashes use [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes)
-```Bash
-hashcat -a 0 -m 3200 hash.txt /usr/share/wordlists/rockyou.txt
-```
-Bcrypt:
+For more complex hashes use [Hashcat](https://hashcat.net/wiki/doku.php?id=example_hashes)  
+
+Bcrypt:  
+
+![image](https://github.com/user-attachments/assets/689f64ae-1cbc-493c-908a-e6c69b82c297)
 ```Bash
 $2y$12$Dwt1BZj6pcyc3Dy1FWZ5ieeUznr71EeNkJkUlypTsgbX1H68wsRom
+```
+```Bash
+hashcat -a 0 -m 3200 hash.txt /usr/share/wordlists/rockyou.txt
 ```
 <pre>
 bleh
@@ -68,14 +71,27 @@ bleh
 <br>
 </br>
 
-For salted encrypted hashes format them as `<hash>:<salt>` in hash.txt
+For salted encrypted hashes format them as `hash:salt` in hash.txt  
+
+HMAC-SHA1:  
+
+![image](https://github.com/user-attachments/assets/956ef83b-fd3c-4d66-bfb4-2ed00736518e)
 ```Bash
- hashcat -a 0 -m 150 hash.txt /usr/share/wordlists/rockyou.txt
+hashcat -a 0 -m 160 hash.txt /usr/share/wordlists/rockyou.txt
 ```
 ```Bash
 e5d8870e5bdd26602cab8dbe07a942c8669e56d6:tryhackme
 ```
-<pre></pre>
+![image](https://github.com/user-attachments/assets/f7faa470-e12e-4d8e-85d8-841654b84f6e)
+<pre>481616481616</pre>
 
-<pre></pre>
-<pre></pre>
+SHA512crypt:  
+
+![image](https://github.com/user-attachments/assets/524e7019-0077-484c-a949-e41582085132)
+```Bash
+hashcat -a 0 -m 1800 hash.txt /usr/share/wordlists/rockyou.txt
+```
+```Bash
+$6$aReallyHardSalt$6WKUTqzq.UQQmrm0p/T7MPpMbGNnzXPMAXi4bJMl9be.cfi3/qxIf.hsGpS41BqMhSrHVXgMpdjS6xeKZAs02.
+```
+<pre>waka99</pre>
