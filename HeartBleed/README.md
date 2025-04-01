@@ -1,4 +1,4 @@
-Metasploit can be used to detect and exploit Heartbleed (CVE-2014-0160) using the openssl_heartbleed auxiliary module.
+[Metasploit](https://www.metasploit.com/) can be used to detect and exploit Heartbleed (CVE-2014-0160) using the openssl_heartbleed auxiliary module.
 
 Run msfconsole command and use scanner module.
 ```BASH
