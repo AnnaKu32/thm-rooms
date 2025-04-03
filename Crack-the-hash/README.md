@@ -1,8 +1,8 @@
-To identify the type of hash used to encrypt a value, you can analyze it using the 'Analyze hash' option in [CyberChief](https://gchq.github.io/CyberChef/), for example:  
+To identify the type of hash used to encrypt a value, you can analyse it using the 'Analyse hash' option in [CyberChief](https://gchq.github.io/CyberChef/) 
 
 ![image](https://github.com/user-attachments/assets/9053fd1c-8d86-49c7-90c4-ed19d8a5aa60)
 
-You can decrypt simple hashes using [Crackstation](https://crackstation.net/), for example:  
+You can decrypt simple hashes using [Crackstation](https://crackstation.net/) 
 
 ![image](https://github.com/user-attachments/assets/e5a17847-a6b5-434e-9ee0-822949b8290d)
 
