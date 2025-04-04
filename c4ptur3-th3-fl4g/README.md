@@ -78,23 +78,30 @@ Base64->Morse Code->Binary->ROT47->Decimal
 <span style="line-height:0.5;">&nbsp;</span>
 
 # Spectrograms
+A practice consists of manipulating frequencies to insert data into an audio file. Sometimes a text or an image is hidden in the sound spectrum.
+To read go to [dcode](https://www.dcode.fr/spectral-analysis)  
 
-<pre></pre>
-<pre></pre>
+![image](https://github.com/user-attachments/assets/e15666f6-6ef1-4fc0-a6f7-3842c26a43a0)
+
+<pre>Super Secret Message</pre>
 
 <span style="line-height:0.5;">&nbsp;</span>
 
 # Steganography
-
-<pre></pre>
-<pre></pre>
+Steganography is the practice of concealing a file, message, image, or video within another file, message, image, or video.
+Go to [Steganographic Decoder](https://futureboy.us/stegano/decinput.html). Attach file and in new window you will get hidden message.
+<pre>SpaghettiSteg</pre>
 
 <span style="line-height:0.5;">&nbsp;</span>
 
 # Security through obscurity
+Security through obscurity is the reliance in security engineering on the secrecy of the design or implementation as the main method of providing security for a system or component of a system.
+Go to [georgeom](https://georgeom.net/StegOnline/image)  
 
-<pre></pre>
-<pre></pre>
+![image](https://github.com/user-attachments/assets/e3f26001-af36-4220-a41f-e07b01faa55b)
+
+<pre>hackerchat.png</pre>
+<pre>AHH_YOU_FOUND_ME!</pre>
 
 
 
