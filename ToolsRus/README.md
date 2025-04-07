@@ -94,11 +94,13 @@ run
 ```
 ![image](https://github.com/user-attachments/assets/6a2e44af-f51c-428b-92f1-0102727b9083)
 
-What user did you get a shell as?
+What user did you get a shell as?  
+
 ![image](https://github.com/user-attachments/assets/acef8c06-b490-4770-a858-57f3e6d61995)
 <pre>root</pre>
 
-What flag is found in the root directory?
+What flag is found in the root directory?  
+
 ![image](https://github.com/user-attachments/assets/07afa7ce-89c5-4e39-9836-a0c178651576)
 <pre>ff1fc4a81affcc7688cf89ae7dc6e0e1</pre>
 
