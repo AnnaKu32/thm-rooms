@@ -7,13 +7,15 @@ What directory can you find, that begins with a "g"?
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-Whose name can you find from this directory?  
+Whose name can you find from this directory?   
+
 ![image](https://github.com/user-attachments/assets/a1c7ea0b-435f-4b45-90e3-9589637fd0f6)
 <pre>bob</pre>
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-What directory has basic authentication?
+What directory has basic authentication?  
+
 ![image](https://github.com/user-attachments/assets/6864c34a-dcca-4f8a-95e4-15dd57a6fd76)
 <pre>protected</pre>
 
@@ -37,7 +39,8 @@ nmap 10.10.148.25
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-What is the name and version of the software running on the port from question 5?
+What is the name and version of the software running on the port from question 5?  
+
 ![image](https://github.com/user-attachments/assets/4725bf64-5644-4d03-bf20-dd25d243aee4)
 <pre>Apache Tomcat/7.0.88</pre>
 
