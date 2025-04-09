@@ -1,8 +1,8 @@
-On start you only have one image:  
+At the start you only have one image:
 
 ![image](https://github.com/user-attachments/assets/db3ea267-ad00-4e40-b1ca-5c19787aa1bc)
 
-To extract detailed metadata from the image you can use tools like [exiftool](https://exif.tools/)
+To extract detailed metadata from the image, you can use tools like [exiftool](https://exif.tools/)
 
 <span style="line-height:0.5;">&nbsp;</span>
 
@@ -26,12 +26,12 @@ The user's tweet suggests a location:
 
 ![image](https://github.com/user-attachments/assets/026dbcef-bec0-40de-9220-c95a2ae95088)  
 
-By searching the BSSID on [WigleNet](https://wigle.net/index), we can trace it to a network named UnileverWiFi. Based on the coordinates in the search this network is located in London.
+By searching the BSSID on [WigleNet](https://wigle.net/index), we can trace it to a network named UnileverWiFi. Based on the coordinates in the search, this network is located in London.
 
 ![image](https://github.com/user-attachments/assets/868463d0-966d-4b61-badf-5d489279beff)  
 ![image](https://github.com/user-attachments/assets/d5da64f7-13a0-4afe-a46d-251f8a36b618)
 
-Additionally, you can find his github on the internet, where he writes:
+Additionally, you can find his GitHub on the internet, where he writes:
 ![image](https://github.com/user-attachments/assets/da3feaf0-5512-42ec-9c55-2a4a64a06ad7)
 <pre>London</pre>
 
@@ -39,7 +39,7 @@ Additionally, you can find his github on the internet, where he writes:
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### What is the SSID of the WAP he connected to?
-Using the BSSID, we can determine the corresponding SSID, whcih is the name of the Wi-Fi network. According to public Wi-Fi mapping data, the BSSID B4:5D:50:AA:86:41 is associated with the SSID UnileverWiFi.
+Using the BSSID, we can determine the corresponding SSID, which is the name of the Wi-Fi network. According to public Wi-Fi mapping data, the BSSID B4:5D:50:AA:86:41 is associated with the SSID UnileverWiFi.
 ![image](https://github.com/user-attachments/assets/276012f4-714b-4e99-a4a3-1d3a800b644c)
 <pre>UnileverWiFi</pre>
 
@@ -56,7 +56,7 @@ Using the BSSID, we can determine the corresponding SSID, whcih is the name of t
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### Where has he gone on holiday?
-From the linked page is shows that he is currently in New York.
+From the linked page it shows that he is currently in New York.
 ![image](https://github.com/user-attachments/assets/da475a9d-9d70-4a35-ac78-0b9ba1ee86c9)
 <pre>New York</pre>
 
