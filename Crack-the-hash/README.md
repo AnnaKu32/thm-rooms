@@ -1,4 +1,4 @@
-### To identify the type of hash used to encrypt a value, you can analyse it using the 'Analyse hash' option in [CyberChief](https://gchq.github.io/CyberChef/) 
+### To identify the type of hash used to encrypt a value, you can analyze it using the 'Analyse hash' option in [CyberChief](https://gchq.github.io/CyberChef/) 
 
 ![image](https://github.com/user-attachments/assets/9053fd1c-8d86-49c7-90c4-ed19d8a5aa60)
 
@@ -73,7 +73,7 @@ hashcat -a 0 -m 3200 hash.txt /usr/share/wordlists/rockyou.txt
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-### For salted encrypted hashes format them as `hash:salt` in hash.txt  
+### For salted encrypted hashes, format them as `hash:salt` in hash.txt  
 
 HMAC-SHA1:  
 
