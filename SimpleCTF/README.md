@@ -37,7 +37,7 @@ Download the Python exploit from [exploit-db](https://www.exploit-db.com/exploit
 ```BASH
 python2 exploit.py -u http://VICTIM_IP_ADRESS/simple --crack -w /usr/share/wordlists/rockyou.txt
 ```
-The script will extract and crack the admin credentials:  
+The script will extract and crack the admin credentials: 
 
 ![image](https://github.com/user-attachments/assets/1887f377-bd6a-4fc2-ad81-c1ceea2b7463)
 
@@ -66,7 +66,7 @@ ls
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### What can you leverage to spawn a privileged shell?
-Run the following to check sudo permissions.
+Run the following command to check sudo permissions.
 ```BASH
 sudo -l
 ```
@@ -78,11 +78,11 @@ This means user mitch can execute vim as root without a password.
 <span style="line-height:0.5;">&nbsp;</span>
 
 ### What's the root flag?
-To escalate privileges using vim go to [GTFOBins](https://gtfobins.github.io/) and search vim. Go to 'Sudo' section and if you can run vim as root via sudo, spawn a root shell by running:
+To escalate privileges using vim, go to [GTFOBins](https://gtfobins.github.io/) and search vim. Go to the 'Sudo' section, and if you can run vim as root via sudo, spawn a root shell by running:
 ```BASH
 sudo vim -c ':!/bin/sh'
 ```
-This command opens vim and immediately executes /bin/sh from within it, giving you a root shell. Exit Vim to open root shell.  
+This command opens vim and immediately executes `/bin/sh` from within it, giving you a root shell. Exit Vim to open root shell.  
 
 ![image](https://github.com/user-attachments/assets/ac6c31d0-bea6-4468-8ec8-5fc75421bde2)
 
