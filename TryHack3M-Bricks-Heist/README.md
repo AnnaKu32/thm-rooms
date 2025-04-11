@@ -118,7 +118,7 @@ After decryption you receive two similar bitcoin wallet addresses:
 `bc1qyk79fcp9hd5kreprce89tkh4wrtl8avt4l67qa`
 `bc1qyk79fcp9had5kreprce89tkh4wrtl8avt4l67qa`    
 
-You check both addresses on a [blockchain explorer](https://www.blockchain.com/en/). The first address shows the expected transaction history. This confirms that the correct wallet address is the first one.  
+Check both addresses on a [blockchain explorer](https://www.blockchain.com/en/). The first address shows the expected transaction history. This confirms that the correct wallet address is the first one.  
 
 ![image](https://github.com/user-attachments/assets/9d46c7cd-c3e1-42dc-b9c1-d666f3c3d8f9)
 
