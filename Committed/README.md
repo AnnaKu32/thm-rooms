@@ -2,8 +2,8 @@ This challenge begins with a .zip archive named commited. Upon extraction, the c
 - Readme.md
 - main.py
 - .git/ directory
-
-![alt text](image.png)
+- 
+![image](https://github.com/user-attachments/assets/179b4580-82ff-4839-87ba-e243bca61aed)
 
 <span style="line-height:0.5;">&nbsp;</span>
 
@@ -14,7 +14,7 @@ Navigate to the `.git/logs/` directory and inspect the HEAD file to review the c
 cat .git/logs/HEAD
 ```
 
-![alt text](image-2.png)
+![image-2](https://github.com/user-attachments/assets/0fadcc98-5a72-4fae-b7eb-def617d121be)
 
 This shows all commits made, including branch checkouts and merges. The key here is to inspect each commit to identify if any sensitive data was ever committed and later removed.
 ```BASH
@@ -25,7 +25,7 @@ git show <commit_hash>
 
 In this commit, hardcoded credentials are visible inside main.py: 
 
-![alt text](image-3.png)
+![image-3](https://github.com/user-attachments/assets/60a4a0b0-4a8a-48a3-8abd-9bfcb1e093ca)
 
 <pre>flag{a489a9dbf8eb9d37c6e0cc1a92cda17b}</pre>
 
