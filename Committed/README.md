@@ -2,14 +2,12 @@ This challenge begins with a .zip archive named commited. Upon extraction, the c
 - Readme.md
 - main.py
 - .git/ directory
-- 
+  
 ![image](https://github.com/user-attachments/assets/179b4580-82ff-4839-87ba-e243bca61aed)
 
 <span style="line-height:0.5;">&nbsp;</span>
 
-The project is described as a Python-based utility designed to help manage MySQL databases. The main.py includes logic to create a database, define a table, and populate it with a record.
-
-Navigate to the `.git/logs/` directory and inspect the HEAD file to review the commit history: 
+The project is described as a Python-based utility designed to help manage MySQL databases. The main.py includes logic to create a database, define a table, and populate it with a record. Navigate to the `.git/logs/` directory and inspect the HEAD file to review the commit history: 
 ```BASH
 cat .git/logs/HEAD
 ```
