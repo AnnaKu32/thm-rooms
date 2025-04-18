@@ -1,5 +1,5 @@
 ### Use nmap to scan the network for all ports. How many ports are open?
-Run the following command shows that 4 ports are open.
+The Nmap scna shows that 4 ports are open.
 ```BASH
 sudo nmap -sV -p- $ip
 ```
