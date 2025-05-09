@@ -34,7 +34,8 @@ The testing approach included:
 - HTTP request manipulation using Burp Suite,
 - automated exploitation and enumeration using sqlmap.
 
-Focus was placed on discovering SQL injection vulnerabilities through both URL parameters and HTTP headers, identifying database schema and extracting sensitive data.
+Focus was placed on discovering SQL injection vulnerabilities through both URL parameters and HTTP headers, identifying database schema and extracting sensitive data. 
+
 <span>&nbsp;</span>
 
 ## Environment Overview
